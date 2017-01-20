@@ -45,10 +45,41 @@
     position relative
     min-height 100%
     overflow hidden
+    font-family "miui", "Helvetica Neue", Helvetica, STHeiTi, sans-serif
+
+  .reader__bd
     background-color #e9dfc7
+
+  .reader__chapter
+    padding 15px
+
+  .reader__content
+    padding-bottom 50px
+    font-size 14px
+    .title
+      border-bottom 1px solid
+      margin-bottom 20px
+      font-size 20px
+      line-height 31px
+      font-weight bold
+      color #736357
+      letter-spacing 2px
+    .text
+      margin .5em 0
+      font-size 1em
+      line-height 24px
+      color #333
+      text-align justify
+      text-indent 2em
 
   .top__bd
     position absolute
     left 100%
     width 100%
+
+  .fiction-toc
+    .item
+      padding 0 14px
+      line-height 2.8em
+      border-bottom 1px solid #eee
 </style>
