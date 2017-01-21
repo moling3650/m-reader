@@ -1,5 +1,6 @@
 'use strict'
 const ERR_OK = 0
+const prefix = 'm-reader_'
 
 const getBSONP = (url, callback) => {
   return window.$.jsonp({
@@ -32,3 +33,7 @@ exports.getChapterContent = (id, callback) => {
     }
   }, 'json')
 }
+
+exports.storageGetter = (key) => window.localStorage.getItem(prefix + key)
+
+exports.storageSetter = (key, val) => window.localStorage.setItem(prefix + key, val)

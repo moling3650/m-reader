@@ -6,7 +6,7 @@
     </div>
     <div class="reader__bd" @click="toggleBar">
       <ul class="reader__chapter">
-        <li class="reader__content" v-for="content in contents">
+        <li class="reader__content" v-for="content in contents" :style="{fontSize: contentFontSize + 'px'}">
           <h1 class="title">{{ content.t }}</h1>
           <p class="text" v-for="p in content.p">{{ p }}</p>
         </li>
@@ -15,8 +15,8 @@
     <div class="reader__font" v-show="barShow && fontBarShow">
       <div class="reader__font-size">
         <span>字号</span>
-        <a href="javascript:" class="reader__font-large">大</a>
-        <a href="javascript:" class="reader__font-small">小</a>
+        <a href="javascript:" class="reader__font-large" @click="lgFont">大</a>
+        <a href="javascript:" class="reader__font-small" @click="smFont">小</a>
       </div>
       <div class="reader__font-bg">
         <span>背景</span>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import {getChapters, getChapterContent} from 'common/js/util.js'
+  import {getChapters, getChapterContent, storageGetter, storageSetter} from 'common/js/util.js'
 
   export default {
     props: {
@@ -62,6 +62,14 @@
       },
       toggleFontBar () {
         this.fontBarShow = !this.fontBarShow
+      },
+      lgFont () {
+        this.contentFontSize < 20 && this.contentFontSize++
+        storageSetter('content-font-size', this.contentFontSize)
+      },
+      smFont () {
+        this.contentFontSize > 12 && this.contentFontSize--
+        storageSetter('content-font-size', this.contentFontSize)
       }
     },
     data () {
@@ -70,10 +78,12 @@
         chapters: [],
         contents: [],
         barShow: false,
-        fontBarShow: false
+        fontBarShow: false,
+        contentFontSize: 14
       }
     },
     created () {
+      this.contentFontSize = storageGetter('content-font-size') || 14
       getChapters((data) => {
         this.title = data.title
         this.chapters = data.chapters
@@ -128,7 +138,6 @@
 
   .reader__content
     padding-bottom 50px
-    font-size 14px
     .title
       border-bottom 1px solid
       margin-bottom 20px
