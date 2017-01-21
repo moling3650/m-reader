@@ -30,9 +30,9 @@
     </div>
     <div class="reader__ft" v-show="barShow">
       <div class="reader__ft-bar">
-        <a href="javascript:" class="reader__prev-chapter">上一章</a>
-        <a href="javascript:">3/671</a>
-        <a href="javascript:" class="reader__next-chapter">下一章</a>
+        <a href="javascript:" class="reader__prev-chapter" @click="getPrevChapter">上一章</a>
+        <a href="javascript:">{{this.chapterId ? this.chapterId : '1'}}/671</a>
+        <a href="javascript:" class="reader__next-chapter" @click="getNextChapter">下一章</a>
       </div>
       <a href="javascript:" class="reader__ft-toc"></a>
       <a href="javascript:" :class="fontBarShow ? 'reader__ft-font-active' : 'reader__ft-font'" @click="toggleFontBar"></a>
@@ -70,6 +70,14 @@
       smFont () {
         this.contentFontSize > 12 && this.contentFontSize--
         storageSetter('content-font-size', this.contentFontSize)
+      },
+      getPrevChapter () {
+        if (this.chapterId > 1) {
+          getChapterContent(--this.chapterId, (data) => this.contents.splice(0, this.contents.length, data))
+        }
+      },
+      getNextChapter () {
+        getChapterContent(++this.chapterId, (data) => this.contents.splice(0, this.contents.length, data))
       }
     },
     data () {
