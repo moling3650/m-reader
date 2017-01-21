@@ -12,6 +12,22 @@
         </li>
       </ul>
     </div>
+    <div class="reader__font">
+      <div class="reader__font-size">
+        <span>字号</span>
+        <a href="javascript:" class="reader__font-large">大</a>
+        <a href="javascript:" class="reader__font-small">小</a>
+      </div>
+      <div class="reader__font-bg">
+        <span>背景</span>
+        <a class="active" href="javascript:"></a>
+        <a href="javascript:"></a>
+        <a href="javascript:"></a>
+        <a href="javascript:"></a>
+        <a href="javascript:"></a>
+        <a href="javascript:"></a>
+      </div>
+    </div>
     <div class="reader__ft">
       <div class="reader__ft-bar">
         <a href="javascript:" class="reader__prev-chapter">上一章</a>
@@ -115,6 +131,56 @@
       color #333
       text-align justify
       text-indent 2em
+
+  .reader__font
+    position fixed
+    bottom 70px
+    z-index 3
+    display block
+    width 100%
+    height 135px
+    background rgba(0, 0, 0, .9)
+    div
+      margin-top 15px
+      padding 5 10px
+    span
+      margin 0 20px 0 10px
+      font-size 14px
+      line-height 21px
+      color #fff
+
+  .reader__font-size
+    a
+      display inline-block
+      padding 5px 40px
+      border 1px solid #8c8c8c
+      border-radius 16px
+      margin 0 5px
+      font-size 13px
+      line-height 16px
+      color #fff
+      text-decoration none
+
+  .reader__font-bg
+    a
+      position relative
+      display inline-block
+      width 30px
+      height 30px
+      border-radius 50%
+      margin-left 10px
+      vertical-align middle
+      background #fff
+      &.active:after
+        content ''
+        position absolute
+        top -2px
+        left -2px
+        display block
+        width 32px
+        height 32px
+        border-radius 50%
+        border 1px solid  #ff7800
 
   .reader__ft
     position fixed
