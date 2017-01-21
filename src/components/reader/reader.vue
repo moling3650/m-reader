@@ -5,8 +5,8 @@
       <a class="reader__more"></a>
     </div>
     <div class="reader__bd" @click="toggleBar">
-      <ul class="reader__chapter">
-        <li class="reader__content" v-for="content in contents" :style="{fontSize: contentFontSize + 'px'}">
+      <ul class="reader__chapter" :style="[{fontSize: contentFontSize + 'px'}, styleObjs[bgType]]">
+        <li class="reader__content" v-for="content in contents">
           <h1 class="title">{{ content.t }}</h1>
           <p class="text" v-for="p in content.p">{{ p }}</p>
         </li>
@@ -20,12 +20,7 @@
       </div>
       <div class="reader__font-bg">
         <span>背景</span>
-        <a class="active" href="javascript:"></a>
-        <a href="javascript:"></a>
-        <a href="javascript:"></a>
-        <a href="javascript:"></a>
-        <a href="javascript:"></a>
-        <a href="javascript:"></a>
+        <a href="javascript:" v-for="(key, sobj) in styleObjs" :class="{active: bgType === key}" :style="sobj" @click="changeBgType(key)"></a>
       </div>
     </div>
     <div class="reader__ft" v-show="barShow">
@@ -48,6 +43,9 @@
 
 <script>
   import {getChapters, getChapterContent, storageGetter, storageSetter} from 'common/js/util.js'
+
+  const INIT_BG_TYPE = 0
+  const INIT_CONTENT_FONT_SIZE = 14
 
   export default {
     props: {
@@ -78,6 +76,10 @@
       },
       getNextChapter () {
         getChapterContent(++this.chapterId, (data) => this.contents.splice(0, this.contents.length, data))
+      },
+      changeBgType (type) {
+        this.bgType = type
+        storageSetter('content-bgType', this.bgType)
       }
     },
     data () {
@@ -87,11 +89,21 @@
         contents: [],
         barShow: false,
         fontBarShow: false,
-        contentFontSize: 14
+        contentFontSize: INIT_CONTENT_FONT_SIZE,
+        styleObjs: [
+          {background: '#f7eee5'},
+          {background: '#e9dfc7'},
+          {background: '#a4a4a4'},
+          {background: '#cdefce'},
+          {background: '#283548', color: '#7685a2'},
+          {background: '#0f1410', color: '#4e534f'}
+        ],
+        bgType: INIT_BG_TYPE
       }
     },
     created () {
-      this.contentFontSize = storageGetter('content-font-size') || 14
+      this.contentFontSize = storageGetter('content-font-size') || INIT_CONTENT_FONT_SIZE
+      this.bgType = storageGetter('content-bgType') || INIT_BG_TYPE
       getChapters((data) => {
         this.title = data.title
         this.chapters = data.chapters
@@ -140,6 +152,7 @@
 
   .reader__bd
     background-color #e9dfc7
+    color #333
 
   .reader__chapter
     padding 15px
@@ -158,7 +171,6 @@
       margin .5em 0
       font-size 1em
       line-height 24px
-      color #333
       text-align justify
       text-indent 2em
 
