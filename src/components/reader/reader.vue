@@ -5,7 +5,7 @@
       <a class="reader__more"></a>
     </div>
     <div class="reader__bd" @click="toggleBar">
-      <ul class="reader__chapter" :style="[{fontSize: contentFontSize + 'px'}, styleObjs[bgType]]">
+      <ul class="reader__chapter" :style="[{fontSize: contentFontSize + 'px'}, contentBgStyle]">
         <li class="reader__content" v-for="content in contents">
           <h1 class="title">{{ content.t }}</h1>
           <p class="text" v-for="p in content.p">{{ p }}</p>
@@ -31,7 +31,7 @@
       </div>
       <a href="javascript:" class="reader__ft-toc"></a>
       <a href="javascript:" :class="fontBarShow ? 'reader__ft-font-active' : 'reader__ft-font'" @click="toggleFontBar"></a>
-      <a href="javascript:" class="reader__ft-night"></a>
+      <a href="javascript:" :class="isNightModel ? 'reader__ft-day' : 'reader__ft-night'" @click="changeModel"></a>
     </div>
     <div class="top__bd">
       <ul class="fiction-toc">
@@ -80,6 +80,15 @@
       changeBgType (type) {
         this.bgType = type
         storageSetter('content-bgType', this.bgType)
+      },
+      changeModel () {
+        this.isNightModel = !this.isNightModel
+        storageSetter('night-model', this.isNightModel)
+      }
+    },
+    computed: {
+      contentBgStyle () {
+        return this.isNightModel ? this.styleObjs[5] : this.styleObjs[this.bgType]
       }
     },
     data () {
@@ -98,12 +107,14 @@
           {background: '#283548', color: '#7685a2'},
           {background: '#0f1410', color: '#4e534f'}
         ],
-        bgType: INIT_BG_TYPE
+        bgType: INIT_BG_TYPE,
+        isNightModel: false
       }
     },
     created () {
+      this.isNightModel = storageGetter('night-model') === 'true'
+      this.bgType = parseInt(storageGetter('content-bgType')) || INIT_BG_TYPE
       this.contentFontSize = storageGetter('content-font-size') || INIT_CONTENT_FONT_SIZE
-      this.bgType = storageGetter('content-bgType') || INIT_BG_TYPE
       getChapters((data) => {
         this.title = data.title
         this.chapters = data.chapters
