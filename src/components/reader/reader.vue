@@ -1,10 +1,10 @@
 <template>
   <div class="reader">
-    <div class="reader__hd">
+    <div class="reader__hd" v-show="barShow">
       <a class="reader__back"></a>
       <a class="reader__more"></a>
     </div>
-    <div class="reader__bd">
+    <div class="reader__bd" @click="toggleBar">
       <ul class="reader__chapter">
         <li class="reader__content" v-for="content in contents">
           <h1 class="title">{{ content.t }}</h1>
@@ -12,7 +12,7 @@
         </li>
       </ul>
     </div>
-    <div class="reader__font">
+    <div class="reader__font" v-show="barShow && fontBarShow">
       <div class="reader__font-size">
         <span>字号</span>
         <a href="javascript:" class="reader__font-large">大</a>
@@ -28,14 +28,14 @@
         <a href="javascript:"></a>
       </div>
     </div>
-    <div class="reader__ft">
+    <div class="reader__ft" v-show="barShow">
       <div class="reader__ft-bar">
         <a href="javascript:" class="reader__prev-chapter">上一章</a>
         <a href="javascript:">3/671</a>
         <a href="javascript:" class="reader__next-chapter">下一章</a>
       </div>
       <a href="javascript:" class="reader__ft-toc"></a>
-      <a href="javascript:" class="reader__ft-font-active"></a>
+      <a href="javascript:" :class="fontBarShow ? 'reader__ft-font-active' : 'reader__ft-font'" @click="toggleFontBar"></a>
       <a href="javascript:" class="reader__ft-night"></a>
     </div>
     <div class="top__bd">
@@ -53,11 +53,24 @@
     props: {
       chapterId: String
     },
+    methods: {
+      toggleBar () {
+        this.barShow = !this.barShow
+        if (!this.barShow) {
+          this.fontBarShow = false
+        }
+      },
+      toggleFontBar () {
+        this.fontBarShow = !this.fontBarShow
+      }
+    },
     data () {
       return {
         title: '',
         chapters: [],
-        contents: []
+        contents: [],
+        barShow: false,
+        fontBarShow: false
       }
     },
     created () {
